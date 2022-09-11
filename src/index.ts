@@ -37,6 +37,11 @@ interface Selection {
     }
     arguments?: Argument[]
     selectionSet?: SelectionSet
+    typeCondition?: {
+        name: {
+            value: string
+        }
+    }
 }
 
 interface SelectionSet {
@@ -131,23 +136,30 @@ const getArguments = (args) => {
 const getSelections = (selections: Selection[]) => {
     const selObj = {}
     selections.forEach((selection) => {
-        const selectionHasAlias = selection.alias
-        const selectionName = selectionHasAlias
-            ? selection.alias.value
-            : selection.name.value
-        if (selection.selectionSet) {
-            selObj[selectionName] = getSelections(
+        if (selection.kind === "InlineFragment") {
+            selObj[`__on_${selection.typeCondition.name.value}`] = getSelections(
                 selection.selectionSet.selections
             )
-            if (selectionHasAlias) {
-                selObj[selection.alias.value].__aliasFor = selection.name.value
+        } else {
+            const selectionHasAlias = selection.alias
+            const selectionName = selectionHasAlias
+                ? selection.alias.value
+                : selection.name.value
+
+            if (selection.selectionSet) {
+                selObj[selectionName] = getSelections(
+                    selection.selectionSet.selections
+                )
+                if (selectionHasAlias) {
+                    selObj[selection.alias.value].__aliasFor = selection.name.value
+                }
             }
-        }
-        if (selection.arguments.length > 0) {
-            selObj[selectionName].__args = getArguments(selection.arguments)
-        }
-        if (!selection.selectionSet && !selection.arguments.length) {
-            selObj[selectionName] = true
+            if (selection.arguments.length > 0) {
+                selObj[selectionName].__args = getArguments(selection.arguments)
+            }
+            if (!selection.selectionSet && !selection.arguments.length) {
+                selObj[selectionName] = true
+            }
         }
     })
     return selObj

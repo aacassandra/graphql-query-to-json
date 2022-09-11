@@ -1,8 +1,11 @@
 {
-    "name": "graphql-query-to-json",
-    "version": "2.0.1",
+    "name": "@aacassandra/graphql-query-to-json",
+    "version": "2.0.2",
     "description": "Convert graphQL queries and mutations to easily readable JSON representations.",
     "main": "dist/index.js",
+    "publishConfig": {
+        "access": "public"
+    },
     "scripts": {
         "build": "rm -rf dist && tsc",
         "watch": "npm run build -- --watch",
@@ -11,8 +14,12 @@
         "updateTestCoverage": "node scripts/updateTestCoverage.js",
         "lintFull": "prettier --write '**/*.{js,jsx,ts,tsx,json}' && eslint --fix '**/*.{js,jsx,ts,tsx}'"
     },
-    "author": "Tray.io",
-    "homepage": "https://github.com/trayio/graphql-query-to-json",
+    "author": {
+        "name": "Alauddin Afif Cassandra",
+        "email": "alauddinafifcassandra@programmer.net",
+        "url": "https://aacassandra-github.web.app"
+    },
+    "homepage": "https://github.com/aacassandra/graphql-query-to-json",
     "license": "MIT",
     "devDependencies": {
         "@types/jest": "^24.0.23",
